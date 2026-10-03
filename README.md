@@ -2,8 +2,8 @@
 
 Kisah data interaktif (*data story*) tentang kemiskinan di 514 kabupaten/kota dan 38 provinsi Indonesia, dengan data resmi BPS. Tugas UAS Visualisasi Data dan Informasi 2026.
 
-- **Situs:** https://USERNAME.github.io/poverty-story/ *(ganti USERNAME dan nama repositori)*
-- **Penulis:** [Nama] ([NIM]) *(isi)*
+- **Situs:** https://Jidann.github.io/UASvisdat/ 
+- **Penulis:** Zidan Septian (222313447) 
 
 Situs berjalan sepenuhnya di browser (HTML, CSS, JavaScript dengan D3.js), tanpa login dan tanpa server. Folder `docs/` adalah situs yang dipublikasikan GitHub Pages.
 
@@ -19,7 +19,7 @@ Setiap visualisasi memuat judul, legenda, satuan, dan keterangan sumber.
 
 ## Data
 
-Tautan lengkap dan tanggal akses juga ada di bagian "Sumber data dan catatan metode" pada situs. **Isi tanggal akses sebenarnya.**
+Tautan lengkap dan tanggal akses juga ada di bagian "Sumber data dan catatan metode" pada situs. 
 
 | Data | Sumber | Berkas di `data/raw/` |
 | --- | --- | --- |
@@ -49,18 +49,17 @@ poverty-story/
 ├── requirements.txt
 ├── .gitignore
 ├── data/
-│   ├── raw/bps/            data mentah BPS (disertakan)
-│   ├── raw/geo/            shapefile LapakGIS (TIDAK disertakan)
-│   └── processed/          hasil antara (matriks migrasi, peta bersih, hasil uji kepekaan)
-├── scripts/                alur pengolahan data (lihat di bawah)
-│   └── arsip/              skrip diagnostik lama, tidak dipakai lagi
-└── docs/                   situs (dipublikasikan GitHub Pages)
+│   ├── raw/bps/ 
+│   ├── raw/geo/ 
+│   └── processed/ 
+├── scripts/ 
+│   └── arsip/  
+└── docs/ 
     ├── index.html
     ├── css/style.css
-    ├── js/                 umum, hero, hook, peta, multivariat, migrasi, kesimpulan
-    │   └── vendor/         d3 dan d3-sankey (salinan lokal)
-    └── data/               kabkota_miskin.geojson, provinsi_pca.json, migrasi.json
-                            (provinsi.json hanya dipakai skrip, bukan situs)
+    ├── js/ 
+    │   └── vendor/
+    └── data/
 ```
 
 ## Mengulang pengolahan data
@@ -75,24 +74,24 @@ npm install -g mapshaper
 Jalankan dari folder proyek, berurutan (perintah untuk Windows CMD):
 
 ```
-:: 1. Peta: buang fitur tanpa nama dan sampah, sederhanakan dengan menjaga batas bersama (topologi)
+1. Peta: buang fitur tanpa nama dan sampah, sederhanakan dengan menjaga batas bersama (topologi)
 mapshaper data/raw/geo/LapakGIS_Batas_Kabupaten_2024.shp -filter "!!WADMKK && WADMKK.indexOf('/') == -1 && WADMKK != 'Pahuwato'" -simplify 1% keep-shapes -o data/processed/kabkota_mapshaper.geojson format=geojson precision=0.0001 force
 
-:: 2. Gabung potongan bernama sama, buang pulau kecil (< ~12 km2) dan lubang, perbaiki arah poligon
+2. Gabung potongan bernama sama, buang pulau kecil (< ~12 km2) dan lubang, perbaiki arah poligon
 python scripts/03b_pascaproses.py data/processed/kabkota_mapshaper.geojson data/processed/kabkota.geojson 0.001
 
-:: 3. Gabungkan data BPS ke peta (Bab 1) dan susun tabel provinsi
+3. Gabungkan data BPS ke peta (Bab 1) dan susun tabel provinsi
 python scripts/04_gabung_data.py
 
-:: 4. PCA, klaster, pencilan (Bab 2)
+4. PCA, klaster, pencilan (Bab 2)
 python scripts/05_pca.py
 
-:: 5. Matriks migrasi (Bab 3), lalu gabungkan dengan kemiskinan provinsi 2020
+5. Matriks migrasi (Bab 3), lalu gabungkan dengan kemiskinan provinsi 2020
 python scripts/build_flow.py data/raw/bps/Arus_Migrasi_Risen.json data/processed risen
 python scripts/build_flow.py data/raw/bps/migrasi_seumur_hidup.json data/processed seumur_hidup
 python scripts/06_siapkan_migrasi.py
 
-:: 6. (Opsional) uji kepekaan PCA dan klaster
+6. (Opsional) uji kepekaan PCA dan klaster
 python scripts/08_uji_kepekaan_pca.py
 ```
 
@@ -124,7 +123,7 @@ lalu buka http://localhost:8000. Server ini tidak memakai cache, sehingga peruba
 
 ## Lisensi dan atribusi
 
-- Data: BPS (sumber resmi, dicantumkan pada setiap visualisasi). Batas wilayah: LapakGIS 2024 (data pendukung non-BPS; **periksa ketentuan penggunaannya sebelum mempublikasikan ulang**).
+- Data: BPS (sumber resmi, dicantumkan pada setiap visualisasi). Batas wilayah: LapakGIS 2024 (data pendukung non-BPS).
 - Pustaka: [D3.js](https://d3js.org) v7.9.0 (ISC) dan [d3-sankey](https://github.com/d3/d3-sankey) v0.12.3 (BSD-3-Clause), disertakan di `docs/js/vendor/`.
 - Huruf: Source Serif 4 dan IBM Plex Sans (SIL Open Font License) dimuat dari Google Fonts.
 - Kode: [pilih lisensi, mis. MIT] *(isi)*
