@@ -2,7 +2,7 @@
 
 Kisah data interaktif (*data story*) tentang kemiskinan di 514 kabupaten/kota dan 38 provinsi Indonesia, dengan data resmi BPS. Tugas UAS Visualisasi Data dan Informasi 2026.
 
-- **Situs:** https://jidannn.github.io/UASvisdat/ 
+- **Situs:** https://jidannn.github.io/UASVisdat/ 
 - **Penulis:** Zidan Septian (222313447) 
 
 Situs berjalan sepenuhnya di browser (HTML, CSS, JavaScript dengan D3.js), tanpa login dan tanpa server. Folder `docs/` adalah situs yang dipublikasikan GitHub Pages.
