@@ -15,7 +15,7 @@ Skrip ini melakukan sisanya:
 TIDAK menyederhanakan lagi (itu tugas mapshaper).
 
 Pemakaian (dari folder proyek):
-  python scripts/03b_pascaproses.py data/processed/kabkota_mapshaper.geojson docs/data/kabkota.geojson 0.001
+  python scripts/03b_pascaproses.py data/processed/kabkota_mapshaper.geojson data/processed/kabkota.geojson 0.001
 """
 import collections
 import json

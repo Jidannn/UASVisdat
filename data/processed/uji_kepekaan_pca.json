@@ -209,7 +209,95 @@
    "celah_k3plus": 3
   }
  },
+ "alternatif_pengelompokan": [
+  {
+   "ruang": "skor-z (semua dimensi)",
+   "k": 3,
+   "ari_antarvariabel_rata": 0.547,
+   "ari_antarvariabel_min": 0.209,
+   "ari_bootstrap": 0.576,
+   "siluet": 0.384,
+   "ukuran": [
+    30,
+    6,
+    2
+   ]
+  },
+  {
+   "ruang": "skor-z (semua dimensi)",
+   "k": 4,
+   "ari_antarvariabel_rata": 0.375,
+   "ari_antarvariabel_min": 0.207,
+   "ari_bootstrap": 0.471,
+   "siluet": 0.325,
+   "ukuran": [
+    25,
+    6,
+    5,
+    2
+   ]
+  },
+  {
+   "ruang": "komponen utama 1-2",
+   "k": 3,
+   "ari_antarvariabel_rata": 0.902,
+   "ari_antarvariabel_min": 0.807,
+   "ari_bootstrap": 0.654,
+   "siluet": 0.416,
+   "ukuran": [
+    26,
+    10,
+    2
+   ]
+  },
+  {
+   "ruang": "komponen utama 1-2",
+   "k": 4,
+   "ari_antarvariabel_rata": 0.584,
+   "ari_antarvariabel_min": 0.369,
+   "ari_bootstrap": 0.612,
+   "siluet": 0.407,
+   "ukuran": [
+    21,
+    10,
+    5,
+    2
+   ]
+  },
+  {
+   "ruang": "komponen utama 1-3",
+   "k": 3,
+   "ari_antarvariabel_rata": 0.697,
+   "ari_antarvariabel_min": 0.554,
+   "ari_bootstrap": 0.502,
+   "siluet": 0.338,
+   "ukuran": [
+    21,
+    15,
+    2
+   ]
+  },
+  {
+   "ruang": "komponen utama 1-3",
+   "k": 4,
+   "ari_antarvariabel_rata": 0.655,
+   "ari_antarvariabel_min": 0.606,
+   "ari_bootstrap": 0.478,
+   "siluet": 0.292,
+   "ukuran": [
+    15,
+    11,
+    10,
+    2
+   ]
+  }
+ ],
  "verifikasi_situs": {
+  "metode_di_situs": {
+   "metode": "Ward",
+   "ruang": "PC1-PC2",
+   "k": 3
+  },
   "ARI_dengan_situs": 1.0,
   "pencilan_sama": true
  }

@@ -2,7 +2,7 @@
 04_gabung_data.py
 Menggabungkan data BPS ke peta kab/kota dan menyiapkan tabel provinsi.
 
-Masukan  : docs/data/kabkota.geojson          (hasil 03_konversi_shp.py)
+Masukan  : data/processed/kabkota.geojson     (hasil 03b_pascaproses.py)
            data/raw/bps/*.csv, ipm_provinsi_2025.xlsx
 Keluaran : docs/data/kabkota_miskin.geojson   (peta + P0, P1, jumlah miskin)
            docs/data/provinsi.json            (tabel 38 provinsi untuk PCA)
@@ -30,7 +30,7 @@ CSV = {"p0": RAW / "Persentase_Penduduk_Miskin_2025.csv",
        "p1": RAW / "Indeks_Kedalaman_Kemiskinan_2025.csv",
        "jml": RAW / "Jumlah_Penduduk_Miskin_2025.csv"}
 IPM = RAW / "ipm_provinsi_2025.xlsx"
-GEO_IN = Path("docs/data/kabkota.geojson")
+GEO_IN = Path("data/processed/kabkota.geojson")
 GEO_OUT = Path("docs/data/kabkota_miskin.geojson")
 PROV_OUT = Path("docs/data/provinsi.json")
 

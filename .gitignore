@@ -1,0 +1,22 @@
+# --- data geospasial mentah berukuran besar (unduh sendiri, lihat README) ---
+data/raw/geo/
+
+# --- hasil antara berukuran besar (dibuat ulang oleh skrip) ---
+data/processed/kabkota_mapshaper.geojson
+
+# --- Python ---
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# --- editor dan sistem operasi ---
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store
+desktop.ini
+
+# --- lain-lain ---
+*.zip
+*.log

@@ -10,7 +10,10 @@ Metode (semua dapat dijelaskan di makalah):
     Jumlah miskin di-log karena sangat menceng (dipengaruhi jumlah penduduk).
   - Standardisasi z-score, lalu PCA dari matriks korelasi (eigen-dekomposisi).
   - Tanda PC1 diatur agar IPM berbobot positif (PC1 tinggi = pembangunan baik).
-  - Klaster: Ward pada skor-z; label diurutkan dari IPM rata-rata tertinggi.
+  - Klaster: Ward pada skor dua komponen utama pertama (PC1-PC2), k = 3; label diurutkan dari IPM
+    rata-rata tertinggi. Dipilih dari enam alternatif karena paling mantap (lihat 08_uji_kepekaan_pca.py:
+    ARI antar-susunan-variabel dan bootstrap). Pengelompokan pada skor-z delapan dimensi dengan k = 4
+    ternyata sensitif terhadap pilihan variabel.
   - Pencilan: jarak Mahalanobis pada bidang PC1-PC2 > 2,45
     (batas khi-kuadrat 95% untuk 2 derajat kebebasan).
   - Urutan baris/kolom heatmap diambil dari dendrogram (heatmap terklaster).
@@ -27,7 +30,8 @@ from scipy.spatial.distance import pdist
 
 SRC = Path("docs/data/provinsi.json")
 OUT = Path("docs/data/provinsi_pca.json")
-K_KLASTER = 4
+K_KLASTER = 3
+RUANG_KLASTER = "PC1-PC2"
 BATAS_PENCILAN = 2.45
 
 VARS = [("p0", "Penduduk miskin (%)", False),
@@ -79,7 +83,7 @@ m = np.sqrt((S[:, 0] ** 2) / lam[0] + (S[:, 1] ** 2) / lam[1])
 pencilan = m > BATAS_PENCILAN
 
 # ---- klaster ----
-L = linkage(Z, method="ward")
+L = linkage(S[:, :2], method="ward")          # klaster pada ruang komponen utama (lebih mantap)
 lab = fcluster(L, K_KLASTER, criterion="maxclust")
 ipm_rata = {c: np.mean([r["ipm"] for r, l in zip(rows, lab) if l == c])
             for c in set(lab)}
@@ -120,6 +124,7 @@ out = {
                          for j, k in enumerate(kode)}},
     "urutan_baris": urutan_baris, "urutan_kolom": urutan_kolom,
     "klaster": ringkas, "provinsi": prov,
+    "metode_klaster": {"metode": "Ward", "ruang": RUANG_KLASTER, "k": K_KLASTER},
 }
 OUT.write_text(json.dumps(out, ensure_ascii=False, indent=1), encoding="utf-8")
 print(f"\nTersimpan: {OUT} ({OUT.stat().st_size/1024:.0f} KB)")

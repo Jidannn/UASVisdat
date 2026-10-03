@@ -9,6 +9,9 @@ Metode (sama dengan 05_pca.py): 8 variabel, jumlah penduduk miskin di-log10,
 skor-z, PCA dari matriks korelasi, klaster Ward, pencilan = jarak Mahalanobis
 pada PC1-PC2 > 2,45.
 
+Bagian 4 menguji ALTERNATIF pengelompokan (ruang skor-z vs ruang komponen utama, k = 3 dan 4)
+dengan dua ukuran kemantapan: kemiripan antar susunan variabel (ARI) dan bootstrap atas provinsi.
+
 Masukan  : docs/data/provinsi.json  (dan, bila ada, docs/data/provinsi_pca.json untuk verifikasi)
 Keluaran : layar, data/processed/uji_kepekaan_pca.json, data/processed/uji_kepekaan_pca.md
 
@@ -142,25 +145,17 @@ for c in SEMUA:
     tanda = "  <-- tinggi" if vif_d[c] > 10 else ""
     print(f"  {NAMA[c]:22s} {vif_d[c]:8.1f}{tanda}")
 
-# verifikasi terhadap hasil yang sudah tampil di situs
-verif = None
-if HASIL_WEB.exists():
-    web = json.loads(HASIL_WEB.read_text(encoding="utf-8"))
-    peta = {p["pk"]: p for p in web["provinsi"]}
-    lab_web = np.array([peta[pk]["klaster"] for pk in PK])
-    pen_web = {i for i, pk in enumerate(PK) if peta[pk]["pencilan"]}
-    verif = {"ARI_dengan_situs": round(ari(dasar["label"], lab_web), 3),
-             "pencilan_sama": pen_web == dasar["pencilan"]}
-    print(f"\nVerifikasi terhadap provinsi_pca.json: ARI = {verif['ARI_dengan_situs']}, "
-          f"pencilan {'sama' if verif['pencilan_sama'] else 'BERBEDA'}  (ARI 1.0 berarti analisis ini identik dengan situs)")
+verif = None                                   # diisi setelah bagian 4
 
 # ---------------------------------------------------------------- 2. varian variabel
 print("\n" + "=" * 72)
 print(f"2. UJI KEPEKAAN VARIABEL (k = {K_DASAR})")
 print("=" * 72)
 ringkas = {}
+A_VAR = {}
 for nama, kolom in VARIAN.items():
     A = dasar if nama.startswith("Dasar") else analisis(kolom)
+    A_VAR[nama] = A
     pc1_r = abs(float(np.corrcoef(A["S"][:, 0], dasar["S"][:, 0])[0, 1]))
     pc2_r = abs(float(np.corrcoef(A["S"][:, 1], dasar["S"][:, 1])[0, 1]))
     pen = sorted(NAMA_PROV[i] for i in A["pencilan"])
@@ -180,6 +175,7 @@ for nama, kolom in VARIAN.items():
     print(f"  Kemiripan klaster dengan dasar: ARI = {r['ari_vs_dasar']}, {r['pindah_klaster']} dari {n} provinsi berpindah klaster")
     print(f"  Korelasi skor PC1 dengan dasar: {r['korelasi_skor_pc1']}, PC2: {r['korelasi_skor_pc2']}")
     print(f"  Ukuran klaster: {r['ukuran_klaster']}")
+    print(f"  VIF tertinggi pada susunan ini: {float(np.diag(np.linalg.inv(A['R'])).max()):.1f}")
     print(f"  Pencilan: {pen if pen else '(tidak ada)'}")
 
 # ---------------------------------------------------------------- 3. memilih k
@@ -194,13 +190,91 @@ for nama in ("Dasar (8 variabel)", "Tanpa IPM dan P1"):
     print(f"\n{nama}")
     print("   k   siluet   celah   klaster terkecil")
     for b in t:
-        tanda = "  <-- k yang dipakai" if b["k"] == K_DASAR else ""
+        tanda = "  <-- k awal pada skor-z (situs kini: PC1-PC2, k = 3)" if b["k"] == K_DASAR else ""
         print(f"  {b['k']:2d}   {b['siluet']:6.3f}  {b['celah']:6.3f}   {b['terkecil']:3d}{tanda}")
     best_s = max(t, key=lambda b: b["siluet"])["k"]
     best_s3 = max(t[1:], key=lambda b: b["siluet"])["k"]        # k = 2 hampir selalu menang (pemisahan kasar): dinilai juga mulai k = 3
     best_g = max(t[1:], key=lambda b: b["celah"])["k"]
     print(f"  Siluet tertinggi pada k = {best_s} (k >= 3: k = {best_s3}); celah terbesar (k >= 3) pada k = {best_g}")
     kt[nama + "_terbaik"] = {"siluet": best_s, "siluet_k3plus": best_s3, "celah_k3plus": best_g}
+
+
+# ---------------------------------------------------------------- 5. alternatif pengelompokan
+print("\n" + "=" * 72)
+print("4. KEMANTAPAN ALTERNATIF PENGELOMPOKAN (Ward)")
+print("=" * 72)
+print("ARI antar-variabel : kemiripan hasil dasar dengan hasil tiga susunan variabel lain (rata-rata dan terendah).")
+print("ARI bootstrap      : kemiripan hasil seluruh data dengan hasil pada contoh acak provinsi (300 ulangan).")
+print("Siluet (pedoman Kaufman-Rousseeuw): > 0,70 kuat; 0,51-0,70 wajar; 0,26-0,50 lemah (bisa artifisial); <= 0,25 tanpa struktur.\n")
+
+rng = np.random.default_rng(2026)
+
+
+def ruang(A, jenis):
+    return A["Z"] if jenis == "Z" else A["S"][:, :(2 if jenis == "PC2" else 3)]
+
+
+def klaster(X, k):
+    return fcluster(linkage(X, method="ward"), k, criterion="maxclust") - 1
+
+
+def boot_ari(X, k, B=300):
+    penuh, skor = klaster(X, k), []
+    for _ in range(B):
+        u = np.unique(rng.integers(0, X.shape[0], X.shape[0]))
+        if len(u) < k + 3:
+            continue
+        skor.append(ari(penuh[u], klaster(X[u], k)))
+    return float(np.mean(skor))
+
+
+NAMA_RUANG = {"Z": "skor-z (semua dimensi)", "PC2": "komponen utama 1-2", "PC3": "komponen utama 1-3"}
+alt = []
+for jenis in ("Z", "PC2", "PC3"):
+    for k in (3, 4):
+        Xd = ruang(dasar, jenis)
+        lab_d = klaster(Xd, k)
+        a_var = [ari(lab_d, klaster(ruang(A_VAR[v], jenis), k)) for v in VARIAN if not v.startswith("Dasar")]
+        alt.append({
+            "ruang": NAMA_RUANG[jenis], "k": k, "ari_antarvariabel_rata": round(float(np.mean(a_var)), 3),
+            "ari_antarvariabel_min": round(float(np.min(a_var)), 3), "ari_bootstrap": round(boot_ari(Xd, k), 3),
+            "siluet": round(siluet(Xd, lab_d), 3), "ukuran": sorted(np.bincount(lab_d).tolist(), reverse=True),
+        })
+print(f"{'ruang':26s} {'k':>2s} {'ARI var (rata)':>15s} {'ARI var (min)':>14s} {'ARI boot':>9s} {'siluet':>7s}  ukuran klaster")
+for a in sorted(alt, key=lambda a: -(a["ari_antarvariabel_rata"] + a["ari_bootstrap"])):
+    tanda = "  <-- pengelompokan saat ini" if (a["ruang"].startswith("skor-z") and a["k"] == K_DASAR) else ""
+    print(f"{a['ruang']:26s} {a['k']:2d} {a['ari_antarvariabel_rata']:15.3f} {a['ari_antarvariabel_min']:14.3f} "
+          f"{a['ari_bootstrap']:9.3f} {a['siluet']:7.3f}  {a['ukuran']}{tanda}")
+
+# keanggotaan klaster pada pilihan teratas, agar mudah ditafsirkan
+atas = max(alt, key=lambda a: a["ari_antarvariabel_rata"] + a["ari_bootstrap"])
+jenis_atas = {v: k for k, v in NAMA_RUANG.items()}[atas["ruang"]]
+lab_atas = klaster(ruang(dasar, jenis_atas), atas["k"])
+urut_ipm = sorted(range(atas["k"]), key=lambda c: -np.mean([rows[i]["ipm"] for i in range(n) if lab_atas[i] == c]))
+print(f"\nAnggota klaster untuk pilihan teratas ({atas['ruang']}, k = {atas['k']}), urut dari IPM rata-rata tertinggi:")
+for no, c in enumerate(urut_ipm, 1):
+    idx = [i for i in range(n) if lab_atas[i] == c]
+    print(f"  Klaster {no} (n = {len(idx)}, IPM {np.mean([rows[i]['ipm'] for i in idx]):.1f}, "
+          f"miskin {np.mean([rows[i]['p0'] for i in idx]):.1f}%): " + ", ".join(NAMA_PROV[i] for i in idx))
+
+
+# ---------------------------------------------------------------- verifikasi terhadap situs
+if HASIL_WEB.exists():
+    web = json.loads(HASIL_WEB.read_text(encoding="utf-8"))
+    meta = web.get("metode_klaster", {"ruang": "skor-z", "k": 4})
+    jenis_web = "PC2" if meta["ruang"] == "PC1-PC2" else "PC3" if meta["ruang"] == "PC1-PC3" else "Z"
+    peta_web = {p["pk"]: p for p in web["provinsi"]}
+    lab_web = np.array([peta_web[pk]["klaster"] for pk in PK])
+    pen_web = {i for i, pk in enumerate(PK) if peta_web[pk]["pencilan"]}
+    lab_cek = klaster(ruang(dasar, jenis_web), meta["k"])
+    verif = {"metode_di_situs": meta, "ARI_dengan_situs": round(ari(lab_cek, lab_web), 3),
+             "pencilan_sama": pen_web == dasar["pencilan"]}
+    print(f"\nVerifikasi terhadap provinsi_pca.json (metode di situs: {meta['ruang']}, k = {meta['k']}): "
+          f"ARI = {verif['ARI_dengan_situs']}, pencilan {'sama' if verif['pencilan_sama'] else 'BERBEDA'} "
+          f"(ARI 1.0 = identik dengan situs)")
+    if (atas["ruang"], atas["k"]) != ({"PC2": "komponen utama 1-2", "PC3": "komponen utama 1-3", "Z": "skor-z (semua dimensi)"}[jenis_web], meta["k"]):
+        print(f"  CATATAN: pilihan teratas pada uji ini ({atas['ruang']}, k = {atas['k']}) berbeda dari yang dipakai situs "
+              f"({meta['ruang']}, k = {meta['k']}). Samakan RUANG_KLASTER dan K_KLASTER di 05_pca.py bila perlu.")
 
 # ---------------------------------------------------------------- 4. paragraf siap pakai
 def kata_ari(x):
@@ -211,40 +285,47 @@ def fd(x, d=2):
     return f"{x:.{d}f}".replace(".", ",")
 
 
-kv = ringkas["Tanpa IPM dan P1"]
 t_d = kt["Dasar (8 variabel)"]
 s4 = next(b for b in t_d if b["k"] == K_DASAR)["siluet"]
 terbaik = kt["Dasar (8 variabel)_terbaik"]
-tetap = kv["pencilan_dasar_tetap"]
 pen_dasar = sorted(NAMA_PROV[i] for i in dasar["pencilan"])
-cocok = [terbaik["siluet_k3plus"] == K_DASAR, terbaik["celah_k3plus"] == K_DASAR]
+varian_lain = [r for nm, r in ringkas.items() if not nm.startswith("Dasar")]
+min_pc1 = min(r["korelasi_skor_pc1"] for r in varian_lain)
+min_pc2 = min(r["korelasi_skor_pc2"] for r in varian_lain)
+pen_sama = all(set(r["pencilan"]) == set(pen_dasar) for r in varian_lain)
+z_asal = next(a for a in alt if a["ruang"].startswith("skor-z") and a["k"] == K_DASAR)
+kategori_siluet = ("kuat" if atas["siluet"] > 0.70 else "wajar" if atas["siluet"] > 0.50
+                   else "lemah" if atas["siluet"] > 0.25 else "tanpa struktur")
 
 par = []
 par.append(f"Karena IPM dibentuk dari umur harapan hidup, harapan lama sekolah, rata-rata lama sekolah, dan pengeluaran per kapita, "
            f"serta persentase penduduk miskin dan P1 berkorelasi sangat tinggi (r = {fd(r_p0_p1)}), dilakukan uji kepekaan. "
            f"Faktor inflasi varians (VIF) IPM adalah {fd(vif_d['ipm'], 1)} dan persentase penduduk miskin {fd(vif_d['p0'], 1)}, "
            f"{'melampaui' if max(vif_d['ipm'], vif_d['p0']) > 10 else 'tidak melampaui'} ambang umum 10.")
-par.append(f"Setelah IPM dan P1 dikeluarkan, dua komponen pertama menjelaskan {fd(kv['pc12_pct'], 1)}% variasi "
-           f"(dasar: {fd(ringkas['Dasar (8 variabel)']['pc12_pct'], 1)}%). Pengelompokan {kata_ari(kv['ari_vs_dasar'])} "
-           f"(ARI = {fd(kv['ari_vs_dasar'])}; {kv['pindah_klaster']} dari {n} provinsi berpindah klaster). "
-           + (f"Pencilan {', '.join(tetap)} tetap terdeteksi." if tetap and set(tetap) == set(pen_dasar)
-              else f"Pencilan dasar ({', '.join(pen_dasar) or 'tidak ada'}) berubah menjadi {', '.join(kv['pencilan']) or 'tidak ada'}."))
-par.append(f"Jumlah klaster ditetapkan k = {K_DASAR}. Skor siluet pada k = {K_DASAR} adalah {fd(s4)}. Siluet tertinggi terdapat pada "
-           f"k = {terbaik['siluet']} (pemisahan kasar dua kelompok) dan, di antara k >= 3, pada k = {terbaik['siluet_k3plus']}. "
-           f"Lompatan tinggi dendrogram terbesar (k >= 3) terdapat pada k = {terbaik['celah_k3plus']}. "
-           + ("Pilihan k = 4 sejalan dengan kedua kriteria untuk k >= 3." if all(cocok)
-              else "Pilihan k = 4 sejalan dengan salah satu dari dua kriteria untuk k >= 3 dan dipertahankan karena memberi ringkasan yang dapat ditafsirkan."
-              if any(cocok) else
-              "Pilihan k = 4 bukan optimum menurut kedua kriteria; dipertahankan hanya karena memberi ringkasan yang dapat ditafsirkan, dan hasilnya perlu dibaca dengan hati-hati."))
+par.append(f"Peta posisi hasil PCA mantap terhadap pilihan variabel: pada tiga susunan lain (tanpa IPM, tanpa P1, tanpa keduanya) "
+           f"korelasi skor PC1 dengan hasil dasar minimal {fd(min_pc1, 3)} dan skor PC2 minimal {fd(min_pc2, 3)}, "
+           f"dengan dua komponen pertama menjelaskan {fd(min(r['pc12_pct'] for r in ringkas.values()), 1)}% sampai "
+           f"{fd(max(r['pc12_pct'] for r in ringkas.values()), 1)}% variasi. "
+           + (f"Pencilan {', '.join(pen_dasar)} sama pada semua susunan." if pen_sama
+              else f"Pencilan dasar ({', '.join(pen_dasar) or 'tidak ada'}) berubah pada sebagian susunan."))
+par.append(f"Sebaliknya, pengelompokan pada ruang skor-z dengan k = {K_DASAR} tidak mantap: kemiripan antar-susunan-variabel "
+           f"rata-rata ARI = {fd(z_asal['ari_antarvariabel_rata'])} (terendah {fd(z_asal['ari_antarvariabel_min'])}) dan ARI bootstrap "
+           f"{fd(z_asal['ari_bootstrap'])}. Dari enam alternatif (ruang skor-z, PC1-2, dan PC1-3; k = 3 dan 4), yang paling mantap adalah "
+           f"pengelompokan Ward pada {atas['ruang']} dengan k = {atas['k']} (ARI antar-susunan-variabel rata-rata "
+           f"{fd(atas['ari_antarvariabel_rata'])}, terendah {fd(atas['ari_antarvariabel_min'])}; ARI bootstrap {fd(atas['ari_bootstrap'])}; "
+           f"siluet {fd(atas['siluet'])}). Skor siluet itu tergolong {kategori_siluet}, sehingga klaster ditafsirkan sebagai "
+           f"pengelompokan deskriptif atas suatu kontinum, bukan kelompok alami. Karena pilihan dibuat setelah membandingkan beberapa "
+           f"alternatif, semua alternatif dilaporkan.")
 
 OUT_JSON.parent.mkdir(parents=True, exist_ok=True)
 OUT_JSON.write_text(json.dumps({"vif": vif_d, "r_p0_p1": round(r_p0_p1, 3), "r2_ipm_dari_komponen": round(r2_ipm, 3),
-                                "varian": ringkas, "pilih_k": kt, "verifikasi_situs": verif},
+                                "varian": ringkas, "pilih_k": kt, "alternatif_pengelompokan": alt,
+                                "verifikasi_situs": verif},
                                ensure_ascii=False, indent=1), encoding="utf-8")
 OUT_MD.write_text("# Uji kepekaan PCA dan klaster (Bab 2)\n\n" + "\n\n".join(par) + "\n", encoding="utf-8")
 
 print("\n" + "=" * 72)
-print("4. PARAGRAF SIAP PAKAI UNTUK MAKALAH (periksa dan sesuaikan)")
+print("5. PARAGRAF SIAP PAKAI UNTUK MAKALAH (periksa dan sesuaikan)")
 print("=" * 72)
 for p in par:
     print("\n" + p)

@@ -5,6 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Kemiskinan Indonesia: di mana, mengapa, dan ke mana orang bergerak</title>
   <meta name="description" content="Kisah data kemiskinan 514 kabupaten/kota di Indonesia: di mana kantongnya, mengapa provinsi berbeda, dan ke mana penduduk berpindah. Data BPS.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Kemiskinan Indonesia: di mana, mengapa, dan ke mana orang bergerak">
+  <meta property="og:description" content="Kisah data kemiskinan 514 kabupaten/kota: peta, perbandingan provinsi, dan arus migrasi. Data BPS.">
+  <meta name="theme-color" content="#f1f4f6">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%231a2631'/%3E%3Crect x='6' y='16' width='4' height='10' fill='%23fee391'/%3E%3Crect x='12' y='12' width='4' height='14' fill='%23fe9929'/%3E%3Crect x='18' y='8' width='4' height='18' fill='%23cc4c02'/%3E%3Crect x='24' y='5' width='3' height='21' fill='%238c2d04'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
@@ -316,7 +321,7 @@
         <li>Bab 1 dan 2 memakai persentase penduduk miskin Maret 2025. Bab 3 memakai Maret 2020 agar sezaman dengan sensus, tetapi migrasi seumur hidup merekam arus yang jauh lebih lama. Hubungan antara migrasi dan kemiskinan hanya gambaran statistik, bukan sebab-akibat.</li>
         <li>Angka kabupaten/kota berasal dari survei (Susenas), bukan sensus, sehingga mengandung galat sampling, terutama di wilayah kecil dan terpencil.</li>
         <li>Persentase perpindahan antarkelompok kemiskinan sangat dipengaruhi segelintir arus besar di sekitar Jawa, terutama yang melibatkan DKI Jakarta. Karena itu ditampilkan juga hasil tanpa arus dari dan ke DKI Jakarta.</li>
-        <li>Klaster dan pencilan bergantung pada pilihan variabel dan metode (Ward untuk klaster, jarak Mahalanobis untuk pencilan).</li>
+        <li>Klaster dibentuk dengan metode Ward pada dua komponen utama pertama dan dipilih dari beberapa alternatif berdasarkan kemantapannya. Struktur klaster tergolong lemah, sehingga kelompok bersifat deskriptif atas suatu kontinum, bukan kelompok alami. Pencilan dideteksi dengan jarak Mahalanobis dan diuji pada beberapa susunan variabel.</li>
         <li>Bab 3 memakai 34 provinsi seperti pada SP2020. Pada pemeriksaan kestabilan peringkat, angka 2025 Papua dan Papua Barat dihitung dari gabungan provinsi pemekaran.</li>
         <li>Batas wilayah disederhanakan dan pulau yang sangat kecil tidak digambar.</li>
       </ul>
@@ -336,7 +341,7 @@
       <li>Batas kabupaten/kota: LapakGIS, <em>Batas Kabupaten 2024</em> (data pendukung non-BPS). Bentuk disederhanakan dengan mapshaper agar ringan di ponsel.</li>
       <li>Skala warna ColorBrewer YlOrBr (aman untuk buta warna). Persentase digambar sebagai warna wilayah karena merupakan rasio; jumlah mutlak digambar sebagai lingkaran berluas sebanding agar wilayah luas berpenduduk sedikit tidak tampak lebih penting.</li>
       <li>IPM menurut provinsi 2025 (umur harapan hidup, harapan lama sekolah, rata-rata lama sekolah, pengeluaran per kapita disesuaikan, IPM): BPS, publikasi <em>Indeks Pembangunan Manusia 2025</em> (<a href="https://www.bps.go.id/en/publication/2026/04/24/f96755ab0e48765d028c0462/indeks-pembangunan-manusia-2025.html">bps.go.id</a>). Diakses Oktober 2026.</li>
-      <li>Bab 2: delapan variabel (persentase penduduk miskin, kedalaman kemiskinan P1, log jumlah penduduk miskin, UHH, HLS, RLS, pengeluaran, IPM) dibakukan (skor-z), lalu PCA dari matriks korelasi. Klaster: metode Ward; pencilan: jarak Mahalanobis pada PC1&ndash;PC2 &gt; 2,45 (batas khi-kuadrat 95%, 2 derajat kebebasan). Jumlah penduduk miskin dilogaritmakan karena sangat menceng. Pengolahan: <code>scripts/05_pca.py</code>.</li>
+      <li>Bab 2: delapan variabel (persentase penduduk miskin, kedalaman kemiskinan P1, log jumlah penduduk miskin, UHH, HLS, RLS, pengeluaran, IPM) dibakukan (skor-z), lalu PCA dari matriks korelasi. Klaster: metode Ward pada skor dua komponen utama pertama (k = 3), dipilih dari enam alternatif (ruang skor-z, PC1&ndash;2, PC1&ndash;3; k = 3 dan 4) karena paling mantap terhadap pilihan variabel dan contoh acak provinsi. Pencilan: jarak Mahalanobis pada PC1&ndash;PC2 &gt; 2,45 (batas khi-kuadrat 95%, 2 derajat kebebasan). Uji kepekaan: <code>scripts/08_uji_kepekaan_pca.py</code>. Jumlah penduduk miskin dilogaritmakan karena sangat menceng. Pengolahan: <code>scripts/05_pca.py</code>.</li>
       <li>Diagram Sankey memakai pustaka d3-sankey (Bostock). Kelompok kemiskinan = tiga kelompok sama besar (tertil) provinsi menurut persentase penduduk miskin (Bab 3: Maret 2020).</li>
       <li>Arus Migrasi Risen Antar Provinsi dan Arus Migrasi Seumur Hidup Antar Provinsi (menurut jenis kelamin; dipakai baris Total), Sensus Penduduk 2020 Long Form, dipublikasikan 2022. BPS, <a href="https://sensus.bps.go.id/topik/tabular/sp2022/170/0/0">sensus.bps.go.id</a>. Diakses Oktober 2026. Migrasi neto = pendatang &minus; perantau, tanpa pindah dalam provinsi; per 100 penduduk memakai jumlah penduduk SP2020 dari tabel yang sama. Pengolahan: <code>scripts/build_flow.py</code>, <code>scripts/06_siapkan_migrasi.py</code>.</li>
       <li>Kelas dibagi enam. Kuantil menjaga jumlah wilayah per kelas tetap sama; natural breaks (Fisher-Jenks) mencari kelompok nilai yang rapat. Batas kelas dibulatkan satu desimal.</li>
@@ -348,8 +353,8 @@
 
 <div id="tip" role="tooltip"></div>
 
-<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
-<script src="https://cdn.jsdelivr.net/npm/d3-sankey@0.12.3/dist/d3-sankey.min.js"></script>
+<script src="js/vendor/d3.min.js"></script>
+<script src="js/vendor/d3-sankey.min.js"></script>
 <script src="js/umum.js?v=9"></script>
 <script src="js/hero.js?v=3"></script>
 <script src="js/hook.js?v=9"></script>
