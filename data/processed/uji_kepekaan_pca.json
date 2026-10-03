@@ -1,0 +1,216 @@
+{
+ "vif": {
+  "p0": 38.5,
+  "p1": 30.5,
+  "jml": 2.2,
+  "uhh": 19.3,
+  "hls": 13.2,
+  "rls": 22.3,
+  "pengeluaran": 25.6,
+  "ipm": 188.2
+ },
+ "r_p0_p1": 0.977,
+ "r2_ipm_dari_komponen": 0.994,
+ "varian": {
+  "Dasar (8 variabel)": {
+   "variabel": 8,
+   "pc1_pct": 67.0,
+   "pc2_pct": 14.8,
+   "pc12_pct": 81.8,
+   "ari_vs_dasar": 1.0,
+   "pindah_klaster": 0,
+   "korelasi_skor_pc1": 1.0,
+   "korelasi_skor_pc2": 1.0,
+   "pencilan": [
+    "Papua Pegunungan",
+    "Papua Tengah"
+   ],
+   "pencilan_dasar_tetap": [
+    "Papua Pegunungan",
+    "Papua Tengah"
+   ],
+   "ukuran_klaster": [
+    25,
+    6,
+    5,
+    2
+   ]
+  },
+  "Tanpa IPM": {
+   "variabel": 7,
+   "pc1_pct": 63.1,
+   "pc2_pct": 16.7,
+   "pc12_pct": 79.8,
+   "ari_vs_dasar": 0.581,
+   "pindah_klaster": 6,
+   "korelasi_skor_pc1": 0.999,
+   "korelasi_skor_pc2": 0.999,
+   "pencilan": [
+    "Papua Pegunungan",
+    "Papua Tengah"
+   ],
+   "pencilan_dasar_tetap": [
+    "Papua Pegunungan",
+    "Papua Tengah"
+   ],
+   "ukuran_klaster": [
+    19,
+    11,
+    6,
+    2
+   ]
+  },
+  "Tanpa P1": {
+   "variabel": 7,
+   "pc1_pct": 66.0,
+   "pc2_pct": 16.7,
+   "pc12_pct": 82.7,
+   "ari_vs_dasar": 0.336,
+   "pindah_klaster": 12,
+   "korelasi_skor_pc1": 0.995,
+   "korelasi_skor_pc2": 0.994,
+   "pencilan": [
+    "Papua Pegunungan",
+    "Papua Tengah"
+   ],
+   "pencilan_dasar_tetap": [
+    "Papua Pegunungan",
+    "Papua Tengah"
+   ],
+   "ukuran_klaster": [
+    18,
+    13,
+    5,
+    2
+   ]
+  },
+  "Tanpa IPM dan P1": {
+   "variabel": 6,
+   "pc1_pct": 60.7,
+   "pc2_pct": 19.4,
+   "pc12_pct": 80.1,
+   "ari_vs_dasar": 0.207,
+   "pindah_klaster": 13,
+   "korelasi_skor_pc1": 0.997,
+   "korelasi_skor_pc2": 0.993,
+   "pencilan": [
+    "Papua Pegunungan",
+    "Papua Tengah"
+   ],
+   "pencilan_dasar_tetap": [
+    "Papua Pegunungan",
+    "Papua Tengah"
+   ],
+   "ukuran_klaster": [
+    13,
+    12,
+    11,
+    2
+   ]
+  }
+ },
+ "pilih_k": {
+  "Dasar (8 variabel)": [
+   {
+    "k": 2,
+    "siluet": 0.44,
+    "celah": 5.284,
+    "terkecil": 8
+   },
+   {
+    "k": 3,
+    "siluet": 0.384,
+    "celah": 2.43,
+    "terkecil": 2
+   },
+   {
+    "k": 4,
+    "siluet": 0.325,
+    "celah": 1.848,
+    "terkecil": 2
+   },
+   {
+    "k": 5,
+    "siluet": 0.262,
+    "celah": 1.366,
+    "terkecil": 2
+   },
+   {
+    "k": 6,
+    "siluet": 0.259,
+    "celah": 0.78,
+    "terkecil": 2
+   },
+   {
+    "k": 7,
+    "siluet": 0.257,
+    "celah": 0.51,
+    "terkecil": 2
+   },
+   {
+    "k": 8,
+    "siluet": 0.264,
+    "celah": 0.042,
+    "terkecil": 2
+   }
+  ],
+  "Dasar (8 variabel)_terbaik": {
+   "siluet": 2,
+   "siluet_k3plus": 3,
+   "celah_k3plus": 3
+  },
+  "Tanpa IPM dan P1": [
+   {
+    "k": 2,
+    "siluet": 0.607,
+    "celah": 3.6,
+    "terkecil": 2
+   },
+   {
+    "k": 3,
+    "siluet": 0.272,
+    "celah": 2.452,
+    "terkecil": 2
+   },
+   {
+    "k": 4,
+    "siluet": 0.266,
+    "celah": 1.097,
+    "terkecil": 2
+   },
+   {
+    "k": 5,
+    "siluet": 0.279,
+    "celah": 1.235,
+    "terkecil": 2
+   },
+   {
+    "k": 6,
+    "siluet": 0.264,
+    "celah": 0.416,
+    "terkecil": 2
+   },
+   {
+    "k": 7,
+    "siluet": 0.247,
+    "celah": 0.36,
+    "terkecil": 2
+   },
+   {
+    "k": 8,
+    "siluet": 0.273,
+    "celah": 0.55,
+    "terkecil": 2
+   }
+  ],
+  "Tanpa IPM dan P1_terbaik": {
+   "siluet": 2,
+   "siluet_k3plus": 5,
+   "celah_k3plus": 3
+  }
+ },
+ "verifikasi_situs": {
+  "ARI_dengan_situs": 1.0,
+  "pencilan_sama": true
+ }
+}

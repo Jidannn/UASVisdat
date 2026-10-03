@@ -1,0 +1,376 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kemiskinan Indonesia: di mana, mengapa, dan ke mana orang bergerak</title>
+  <meta name="description" content="Kisah data kemiskinan 514 kabupaten/kota di Indonesia: di mana kantongnya, mengapa provinsi berbeda, dan ke mana penduduk berpindah. Data BPS.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css?v=9">
+</head>
+<body>
+
+<nav class="atas" id="nav-atas" aria-label="Navigasi bab">
+  <a class="judul-atas" href="#hero">Kemiskinan Indonesia</a>
+  <div class="tautan">
+    <a href="#bab1-kartu" data-bab="bab1">1 Di mana?</a>
+    <a href="#bab2-kartu" data-bab="bab2">2 Mengapa?</a>
+    <a href="#bab3-kartu" data-bab="bab3">3 Ke mana?</a>
+    <a href="#kesimpulan" data-bab="kesimpulan">Kesimpulan</a>
+  </div>
+  <i class="progres" id="progres" aria-hidden="true"></i>
+</nav>
+
+<header class="hero" id="hero">
+  <div class="hero-peta" id="hero-peta" aria-hidden="true"></div>
+  <div class="hero-isi">
+    <p class="kicker muncul-hero" style="--d:0">Data BPS &middot; Maret 2025 &middot; <span id="hero-n">514</span> kabupaten/kota</p>
+    <h1 class="muncul-hero" style="--d:1">Kemiskinan<br>Indonesia</h1>
+    <p class="dek muncul-hero" style="--d:2">Di mana kantong kemiskinan berada, mengapa daerah berbeda jauh, dan ke mana penduduk berpindah.</p>
+    <p class="angka-besar muncul-hero" style="--d:3"><b id="hero-angka">&ndash;</b><span>juta jiwa penduduk miskin, dijumlahkan dari seluruh kabupaten/kota</span></p>
+    <a class="gulir muncul-hero" style="--d:4" href="#bab1-kartu">Gulir untuk mulai <span aria-hidden="true">&darr;</span></a>
+  </div>
+</header>
+
+<div class="halaman">
+<main>
+
+  <!-- ===================== BAB 1 ===================== -->
+  <section class="kartu-bab" id="bab1-kartu" aria-labelledby="bab1-judul">
+    <div class="teks-kartu">    <p class="nomor muncul" aria-hidden="true">01</p>
+    <p class="kicker muncul" style="--d:1">Bab 1 &middot; Geospasial</p>
+    <h2 id="bab1-judul" class="muncul" style="--d:2">Di mana kantong kemiskinan?</h2>
+    <p class="teaser muncul" style="--d:3">Persentase penduduk miskin menunjukkan <em>seberapa parah</em> kemiskinan di suatu daerah. Jumlah penduduk miskin menunjukkan <em>berapa banyak</em> orang yang terdampak. Keduanya sering menunjuk daerah yang berbeda, jadi peta berikut menampilkan keduanya.</p>
+    <p class="stat muncul" style="--d:4"><b id="stat-b1">&ndash;</b><span>kabupaten/kota memiliki persentase penduduk miskin di atas 20%</span></p>
+  
+    </div>
+    <figure class="hook muncul" style="--d:2" role="img" aria-label="Cakrawala kemiskinan: batang kabupaten/kota diurutkan menurut persentase penduduk miskin">
+      <div class="hook-isi" id="hook-b1-isi"></div>
+      <figcaption id="hook-b1-ket"></figcaption>
+    </figure>
+  </section>
+
+  <section class="bab-panggung" id="bab1" aria-label="Peta kemiskinan kabupaten/kota">
+    <div class="scrolly" id="b1-scrolly">
+      <div class="panggung" id="b1-panggung">
+        <aside class="teks-panel" id="b1-teks" aria-live="polite">
+          <div class="langkah-kepala">
+            <span id="b1-no" class="lk-no"></span>
+            <div id="b1-dots" class="lk-dots" role="group" aria-label="Langkah"></div>
+          </div>
+          <h3 id="b1-judul"></h3>
+          <div id="b1-isi" class="lk-isi"></div>
+          <div class="lk-nav">
+            <button type="button" id="b1-prev">&larr; Sebelumnya</button>
+            <button type="button" id="b1-next">Berikutnya &rarr;</button>
+          </div>
+        </aside>
+
+        <div class="viz-panel">
+          <div class="viz-bar bar-peta">
+            <div class="toggle-lapis" role="group" aria-label="Lapisan peta">
+              <label class="cek"><input type="checkbox" id="lyr-warna" checked><span><i class="swatch-mini warna"></i>Warna: persentase</span></label>
+              <label class="cek"><input type="checkbox" id="lyr-lingkaran" checked><span><i class="swatch-mini bulat"></i>Lingkaran: jumlah</span></label>
+            </div>
+            <label class="pilih-kecil" id="metode-wrap"><span>Kelas</span>
+              <select id="metode" title="Kuantil: tiap kelas berisi jumlah wilayah yang sama. Natural breaks: kelompok nilai yang rapat.">
+                <option value="kuantil">Kuantil</option>
+                <option value="jenks">Natural breaks</option>
+              </select></label>
+            <label class="pilih-kecil"><span>Provinsi</span>
+              <select id="provinsi"><option value="">Semua</option></select></label>
+          </div>
+          <div class="viz-kotak">
+            <figure class="viz-item aktif" data-view="peta1">
+              <div id="peta" class="viz-host" aria-label="Peta kemiskinan kabupaten/kota">
+                <p class="peta-judul" id="peta-judul"></p>
+                <p class="peta-sumber">Sumber: BPS</p>
+                <div class="zoom-btn" role="group" aria-label="Kontrol zoom">
+                  <button type="button" id="z-masuk" aria-label="Perbesar">+</button>
+                  <button type="button" id="z-keluar" aria-label="Perkecil">&minus;</button>
+                  <button type="button" id="z-reset" aria-label="Kembali ke seluruh Indonesia">&#8962;</button>
+                </div>
+                <div class="kartu-peta" id="kartu" hidden></div>
+              </div>
+              <div class="legenda" id="legenda" aria-live="polite">
+                <div class="leg-warna">
+                  <h3>Penduduk miskin (% dari penduduk)</h3>
+                  <div class="leg-blok" id="leg-warna"></div>
+                </div>
+                <div class="leg-bulat" id="leg-bulat-wrap">
+                  <h3>Jumlah penduduk miskin (ribu jiwa)</h3>
+                  <svg id="leg-bulat" role="img" aria-label="Legenda ukuran lingkaran"></svg>
+                </div>
+              </div>
+              <p class="sumber">Sumber: BPS, Persentase dan Jumlah Penduduk Miskin menurut Kabupaten/Kota (Susenas Maret 2025). Batas wilayah: LapakGIS 2024 (bukan BPS), disederhanakan. Pulau kurang dari sekitar 12 km&sup2; tidak digambar.</p>
+            </figure>
+          </div>
+        </div>
+      </div>
+      <div class="pemicu-wadah" id="b1-pemicu"></div>
+    </div>
+  </section>
+
+  <section class="peringkat-sec" aria-label="Peringkat kabupaten/kota">
+    <div class="peringkat">
+      <div>
+        <h3>10 kabupaten/kota dengan persentase penduduk miskin tertinggi</h3>
+        <ol id="rank-p0"></ol>
+      </div>
+      <div>
+        <h3>10 kabupaten/kota dengan jumlah penduduk miskin terbanyak (rb = ribu jiwa)</h3>
+        <ol id="rank-jml"></ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== BAB 2 ===================== -->
+  <section class="kartu-bab" id="bab2-kartu" aria-labelledby="bab2-judul">
+    <div class="teks-kartu">    <p class="nomor muncul" aria-hidden="true">02</p>
+    <p class="kicker muncul" style="--d:1">Bab 2 &middot; Multivariat</p>
+    <h2 id="bab2-judul" class="muncul" style="--d:2">Mengapa provinsi berbeda?</h2>
+    <p class="teaser muncul" style="--d:3">Satu angka kemiskinan tidak menjelaskan banyak. Di sini 38 provinsi dibandingkan sekaligus menurut delapan ukuran: persentase dan kedalaman kemiskinan, jumlah penduduk miskin, umur harapan hidup, harapan dan rata-rata lama sekolah, pengeluaran per kapita, dan IPM.</p>
+    <p class="stat muncul" style="--d:4"><b>38 &times; 8</b><span>provinsi dan ukuran yang dibandingkan sekaligus</span></p>
+  
+    </div>
+    <figure class="hook muncul" style="--d:2" role="img" aria-label="Titik provinsi yang bergerak dan bertemu pada peta posisi dua sumbu (PCA)">
+      <div class="hook-isi" id="hook-b2-isi"></div>
+      <figcaption id="hook-b2-ket"></figcaption>
+    </figure>
+  </section>
+
+  <section class="bab-panggung bab2" id="bab2" aria-labelledby="bab2-judul">
+    <div class="bab2-kepala">
+      <p class="petunjuk" id="petunjuk-bab2"></p>
+      <p class="galat" id="bab2-galat" hidden></p>
+    </div>
+    <div class="scrolly" id="scrolly2">
+      <div class="panggung" id="panggung2">
+        <aside class="teks-panel" id="teks2" aria-live="polite">
+          <div class="langkah-kepala">
+            <span id="lk-no" class="lk-no"></span>
+            <div id="lk-dots" class="lk-dots" role="group" aria-label="Langkah"></div>
+          </div>
+          <h3 id="lk-judul"></h3>
+          <div id="lk-isi" class="lk-isi"></div>
+          <div class="lk-nav">
+            <button type="button" id="lk-prev">&larr; Sebelumnya</button>
+            <button type="button" id="lk-next">Berikutnya &rarr;</button>
+          </div>
+          <div class="lk-pilihan-wrap">
+            <div class="lk-pilihan-kepala"><h4>Pilihan Anda</h4><button type="button" id="lk-hapus" hidden>Hapus</button></div>
+            <div id="lk-pilihan"></div>
+          </div>
+        </aside>
+
+        <div class="viz-panel">
+          <div class="viz-bar">
+            <div id="viz-tabs" class="viz-tabs" role="tablist" aria-label="Grafik"></div>
+            <button type="button" id="hapus-mini" class="mini-btn" hidden>Hapus pilihan</button>
+            <div id="legenda-klaster" class="legenda-klaster" role="group" aria-label="Klaster provinsi; pilih untuk menyorot anggotanya"></div>
+          </div>
+          <div class="viz-kotak">
+            <figure class="viz-item" data-view="sebar">
+              <figcaption class="viz-judul"><strong>Peta posisi provinsi (PCA)</strong><span>Provinsi yang berdekatan memiliki profil serupa.</span></figcaption>
+              <div id="sebar" class="viz-host"></div>
+              <p class="sumber">Sumber: BPS, Susenas Maret 2025 (persentase, kedalaman, dan jumlah penduduk miskin) dan Indeks Pembangunan Manusia 2025 (UHH, HLS, RLS, pengeluaran, IPM); diolah. Elips putus-putus: batas pencilan. Singkatan: Miskin (%) = persentase penduduk miskin, Jml miskin = jumlah penduduk miskin.</p>
+            </figure>
+            <figure class="viz-item" data-view="paralel">
+              <figcaption class="viz-judul"><strong>Profil tiap provinsi (parallel coordinates)</strong><span>Satu garis per provinsi. Seret pada sumbu untuk menyaring.</span></figcaption>
+              <div id="paralel" class="viz-host"></div>
+              <p class="sumber">Sumber: BPS, Susenas Maret 2025 dan Indeks Pembangunan Manusia 2025; diolah. Sumbu jumlah penduduk miskin berskala logaritma. Singkatan: Miskin (%) = persentase penduduk miskin, Jml miskin = jumlah penduduk miskin, P1 = kedalaman kemiskinan.</p>
+            </figure>
+            <figure class="viz-item" data-view="heat">
+              <figcaption class="viz-judul"><strong>Heatmap terklaster</strong><span>Posisi terhadap rata-rata 38 provinsi (skor-z).</span></figcaption>
+              <div id="heat" class="viz-host"></div>
+              <div class="skala-z-wrap"><span>di bawah rata-rata</span><i id="skala-z"></i><span>di atas rata-rata</span></div>
+              <p class="sumber">Sumber: BPS, Susenas Maret 2025 dan Indeks Pembangunan Manusia 2025; diolah. Warna tidak menunjukkan baik atau buruk: IPM tinggi dan persentase penduduk miskin tinggi sama-sama berwarna di atas rata-rata. Miskin (%) = persentase penduduk miskin, Jml miskin = jumlah penduduk miskin.</p>
+            </figure>
+          </div>
+        </div>
+      </div>
+      <div class="pemicu-wadah" id="pemicu2"></div>
+    </div>
+  </section>
+
+  <!-- ===================== BAB 3 ===================== -->
+  <section class="kartu-bab" id="bab3-kartu" aria-labelledby="bab3-judul">
+    <div class="teks-kartu">    <p class="nomor muncul" aria-hidden="true">03</p>
+    <p class="kicker muncul" style="--d:1">Bab 3 &middot; Aliran</p>
+    <h2 id="bab3-judul" class="muncul" style="--d:2">Ke mana orang bergerak?</h2>
+    <p class="teaser muncul" style="--d:3">Apakah penduduk berpindah dari daerah miskin ke daerah yang lebih sejahtera? Sensus Penduduk 2020 mencatat dua hal yang berbeda: ke mana orang pindah dalam lima tahun terakhir, dan di mana orang tinggal dibandingkan dengan provinsi tempat ia dilahirkan.</p>
+    <p class="stat muncul" style="--d:4"><b><span id="stat-b3">&ndash;</span> juta</b><span>perpindahan antarprovinsi dalam lima tahun menjelang SP2020</span></p>
+  
+    </div>
+    <figure class="hook muncul" style="--d:2" role="img" aria-label="Busur arus migrasi antarprovinsi terbesar di atas peta Indonesia">
+      <div class="hook-isi" id="hook-b3-isi"></div>
+      <figcaption id="hook-b3-ket"></figcaption>
+    </figure>
+  </section>
+
+  <section class="bab-panggung" id="bab3" aria-labelledby="bab3-judul">
+    <div class="bab2-kepala">
+      <p class="petunjuk" id="petunjuk-bab3"></p>
+      <p class="galat" id="bab3-galat" hidden></p>
+    </div>
+    <div class="scrolly" id="b3-scrolly">
+      <div class="panggung" id="b3-panggung">
+        <aside class="teks-panel" id="b3-teks" aria-live="polite">
+          <div class="langkah-kepala">
+            <span id="b3-no" class="lk-no"></span>
+            <div id="b3-dots" class="lk-dots" role="group" aria-label="Langkah"></div>
+          </div>
+          <h3 id="b3-judul"></h3>
+          <div id="b3-isi" class="lk-isi"></div>
+          <div class="lk-nav">
+            <button type="button" id="b3-prev">&larr; Sebelumnya</button>
+            <button type="button" id="b3-next">Berikutnya &rarr;</button>
+          </div>
+          <div class="lk-pilihan-wrap">
+            <div class="lk-pilihan-kepala"><h4>Fokus saat ini</h4></div>
+            <div class="kartu-m" id="m-kartu" aria-live="polite"></div>
+          </div>
+          <details class="atur">
+            <summary>Pengaturan lanjutan</summary>
+            <div class="atur-isi">
+              <label class="judul" for="m-fokus">Provinsi</label>
+              <select id="m-fokus"><option value="-1">Semua provinsi</option></select>
+              <fieldset>
+                <legend>Arah arus</legend>
+                <label class="cek"><input type="radio" name="m-arah" value="keluar"><span>Keluar dari provinsi</span></label>
+                <label class="cek"><input type="radio" name="m-arah" value="masuk"><span>Masuk ke provinsi</span></label>
+                <label class="cek"><input type="radio" name="m-arah" value="keduanya" checked><span>Keduanya</span></label>
+              </fieldset>
+              <label class="judul" for="m-n">Arus terbesar yang digambar: <output id="m-n-out"></output></label>
+              <input type="range" id="m-n" min="10" max="200" step="10" value="60">
+              <small id="m-jml-tampil"></small>
+            </div>
+          </details>
+        </aside>
+
+        <div class="viz-panel">
+          <div class="viz-bar">
+            <div id="b3-tabs" class="viz-tabs" role="tablist" aria-label="Grafik"></div>
+            <div id="m-periode" class="seg" role="radiogroup" aria-label="Periode"></div>
+            <button type="button" id="fokus-mini" class="mini-btn" hidden></button>
+            <p class="ket-periode" id="m-ket"></p>
+          </div>
+          <div class="viz-kotak">
+            <figure class="viz-item aktif" data-view="chord">
+              <figcaption class="viz-judul"><strong>Diagram chord antarprovinsi</strong><span>Lebar pita menunjukkan jumlah orang, ujung runcing menunjuk provinsi tujuan.</span></figcaption>
+              <div id="chord" class="viz-host"></div>
+              <div class="legenda-m">
+                <div><h4>Warna busur: penduduk miskin Maret 2020 (%)</h4><div class="leg-blok" id="m-leg-p0"></div></div>
+                <div><h4>Warna pita</h4>
+                  <ul class="leg-pita">
+                    <li><i style="background:#0072B2"></i>keluar dari provinsi terpilih</li>
+                    <li><i style="background:#D55E00"></i>masuk ke provinsi terpilih</li>
+                    <li><i style="background:#6b8199"></i>arus lain</li>
+                  </ul></div>
+              </div>
+              <p class="sumber">Sumber: BPS, Sensus Penduduk 2020 (Long Form), Arus Migrasi Antar Provinsi; persentase penduduk miskin: BPS, Susenas Maret 2020, menurut 34 provinsi seperti pada SP2020.</p>
+            </figure>
+            <figure class="viz-item" data-view="sankey" aria-hidden="true">
+              <figcaption class="viz-judul"><strong>Diagram alluvial (Sankey)</strong><span>Aliran dari provinsi asal (kiri) ke tujuan (kanan).</span></figcaption>
+              <div class="opsi" role="radiogroup" aria-label="Tingkat agregasi diagram Sankey">
+                <label><input type="radio" name="m-level" value="provinsi" checked> Provinsi</label>
+                <label><input type="radio" name="m-level" value="pulau"> Kelompok pulau</label>
+                <label><input type="radio" name="m-level" value="kemiskinan"> Kelompok kemiskinan</label>
+              </div>
+              <div id="sankey" class="viz-host"></div>
+              <p class="ket-sankey" id="sankey-ket"></p>
+              <p class="sumber">Sumber: BPS, SP2020 Long Form dan Susenas Maret 2020, diolah. Pada tingkat provinsi hanya arus terbesar yang digambar.</p>
+            </figure>
+            <figure class="viz-item" data-view="neto" aria-hidden="true">
+              <figcaption class="viz-judul"><strong>Migrasi neto per 100 penduduk</strong><span>Pendatang dikurangi perantau. Warna menunjukkan persentase penduduk miskin Maret 2020.</span></figcaption>
+              <div id="neto" class="viz-host"></div>
+              <p class="sumber">Sumber: BPS, SP2020 Long Form dan Susenas Maret 2020, diolah.</p>
+            </figure>
+            <figure class="viz-item" data-view="matriks" aria-hidden="true">
+              <figcaption class="viz-judul"><strong>Matriks asal-tujuan</strong><span>Baris adalah asal, kolom adalah tujuan. Makin pekat, makin banyak orang.</span></figcaption>
+              <div id="matriks" class="viz-host"></div>
+              <div class="skala-z-wrap"><span>0</span><i id="m-skala"></i><span id="m-skala-max"></span></div>
+              <p class="sumber">Sumber: BPS, SP2020 Long Form, diolah. Skala akar kuadrat, dipotong pada persentil ke-99. Diagonal tidak ditampilkan.</p>
+            </figure>
+          </div>
+        </div>
+      </div>
+      <div class="pemicu-wadah" id="b3-pemicu"></div>
+    </div>
+  </section>
+
+
+  <!-- ===================== KESIMPULAN ===================== -->
+  <section class="kesimpulan" id="kesimpulan" aria-labelledby="kesimpulan-judul">
+    <div class="kes-kepala">
+      <p class="kicker muncul">Kesimpulan</p>
+      <h2 id="kesimpulan-judul" class="muncul" style="--d:1">Tiga pertanyaan, tiga jawaban</h2>
+    </div>
+    <div class="kes-grid" id="kes-grid"></div>
+    <p class="kes-penutup muncul" id="kes-penutup"></p>
+    <details class="kes-batas" open>
+      <summary>Hal yang perlu diingat</summary>
+      <ul>
+        <li>Bab 1 dan 2 memakai persentase penduduk miskin Maret 2025. Bab 3 memakai Maret 2020 agar sezaman dengan sensus, tetapi migrasi seumur hidup merekam arus yang jauh lebih lama. Hubungan antara migrasi dan kemiskinan hanya gambaran statistik, bukan sebab-akibat.</li>
+        <li>Angka kabupaten/kota berasal dari survei (Susenas), bukan sensus, sehingga mengandung galat sampling, terutama di wilayah kecil dan terpencil.</li>
+        <li>Persentase perpindahan antarkelompok kemiskinan sangat dipengaruhi segelintir arus besar di sekitar Jawa, terutama yang melibatkan DKI Jakarta. Karena itu ditampilkan juga hasil tanpa arus dari dan ke DKI Jakarta.</li>
+        <li>Klaster dan pencilan bergantung pada pilihan variabel dan metode (Ward untuk klaster, jarak Mahalanobis untuk pencilan).</li>
+        <li>Bab 3 memakai 34 provinsi seperti pada SP2020. Pada pemeriksaan kestabilan peringkat, angka 2025 Papua dan Papua Barat dihitung dari gabungan provinsi pemekaran.</li>
+        <li>Batas wilayah disederhanakan dan pulau yang sangat kecil tidak digambar.</li>
+      </ul>
+    </details>
+  </section>
+
+</main>
+
+<footer class="kaki">
+  <details open id="sumber-data">
+    <summary>Sumber data dan catatan metode</summary>
+    <ul>
+      <li>Persentase penduduk miskin (P0) menurut kabupaten/kota, 2025 (Maret). BPS, Susenas. <a href="https://www.bps.go.id/indicator/23/621/1/persentase-penduduk-miskm-pQ-menurut-kabupaten-kota.html">bps.go.id</a>. Diakses Oktober 2026.</li>
+      <li>Indeks kedalaman kemiskinan (P1) menurut kabupaten/kota, 2025 (Maret). BPS, Susenas. <a href="https://www.bps.go.id/id/statistics-table/2/NjIyIzI=/indeks-kedalaman-kemiskinan--p1--menurut-kabupaten-kota.html">bps.go.id</a>. Diakses Oktober 2026.</li>
+      <li>Persentase penduduk miskin (P0) menurut provinsi, Maret 2015, 2020, dan 2025. BPS, Susenas. <a href="https://www.bps.go.id/id/statistics-table/2/MTkyIzI=/persentase-penduduk-miskin--p0--menurut-provinsi-dan-daerah.html">bps.go.id</a>. Diakses Oktober 2026. Tahun 2020 dipakai pada Bab 3.</li>
+      <li>Jumlah penduduk miskin (ribu jiwa) menurut kabupaten/kota, 2025 (Maret). BPS, Susenas. <a href="https://www.bps.go.id/en/statistics-table/2/NjE5IzI=/jumlah-penduduk-miskin--ribu-jiwa--menurut-kabupaten-kota.html">bps.go.id</a>. Diakses Oktober 2026.</li>
+      <li>Batas kabupaten/kota: LapakGIS, <em>Batas Kabupaten 2024</em> (data pendukung non-BPS). Bentuk disederhanakan dengan mapshaper agar ringan di ponsel.</li>
+      <li>Skala warna ColorBrewer YlOrBr (aman untuk buta warna). Persentase digambar sebagai warna wilayah karena merupakan rasio; jumlah mutlak digambar sebagai lingkaran berluas sebanding agar wilayah luas berpenduduk sedikit tidak tampak lebih penting.</li>
+      <li>IPM menurut provinsi 2025 (umur harapan hidup, harapan lama sekolah, rata-rata lama sekolah, pengeluaran per kapita disesuaikan, IPM): BPS, publikasi <em>Indeks Pembangunan Manusia 2025</em> (<a href="https://www.bps.go.id/en/publication/2026/04/24/f96755ab0e48765d028c0462/indeks-pembangunan-manusia-2025.html">bps.go.id</a>). Diakses Oktober 2026.</li>
+      <li>Bab 2: delapan variabel (persentase penduduk miskin, kedalaman kemiskinan P1, log jumlah penduduk miskin, UHH, HLS, RLS, pengeluaran, IPM) dibakukan (skor-z), lalu PCA dari matriks korelasi. Klaster: metode Ward; pencilan: jarak Mahalanobis pada PC1&ndash;PC2 &gt; 2,45 (batas khi-kuadrat 95%, 2 derajat kebebasan). Jumlah penduduk miskin dilogaritmakan karena sangat menceng. Pengolahan: <code>scripts/05_pca.py</code>.</li>
+      <li>Diagram Sankey memakai pustaka d3-sankey (Bostock). Kelompok kemiskinan = tiga kelompok sama besar (tertil) provinsi menurut persentase penduduk miskin (Bab 3: Maret 2020).</li>
+      <li>Arus Migrasi Risen Antar Provinsi dan Arus Migrasi Seumur Hidup Antar Provinsi (menurut jenis kelamin; dipakai baris Total), Sensus Penduduk 2020 Long Form, dipublikasikan 2022. BPS, <a href="https://sensus.bps.go.id/topik/tabular/sp2022/170/0/0">sensus.bps.go.id</a>. Diakses Oktober 2026. Migrasi neto = pendatang &minus; perantau, tanpa pindah dalam provinsi; per 100 penduduk memakai jumlah penduduk SP2020 dari tabel yang sama. Pengolahan: <code>scripts/build_flow.py</code>, <code>scripts/06_siapkan_migrasi.py</code>.</li>
+      <li>Kelas dibagi enam. Kuantil menjaga jumlah wilayah per kelas tetap sama; natural breaks (Fisher-Jenks) mencari kelompok nilai yang rapat. Batas kelas dibulatkan satu desimal.</li>
+    </ul>
+    <p id="info-data" class="info-data"></p>
+  </details>
+</footer>
+</div>
+
+<div id="tip" role="tooltip"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+<script src="https://cdn.jsdelivr.net/npm/d3-sankey@0.12.3/dist/d3-sankey.min.js"></script>
+<script src="js/umum.js?v=9"></script>
+<script src="js/hero.js?v=3"></script>
+<script src="js/hook.js?v=9"></script>
+<script src="js/peta.js?v=6"></script>
+<script src="js/multivariat.js?v=9"></script>
+<script src="js/migrasi.js?v=10"></script>
+<script src="js/kesimpulan.js?v=10"></script>
+<script>
+  /* Peringatan jika ada berkas JS yang belum diganti atau masih tersimpan di cache */
+  addEventListener('load', function () {
+    var m = (window.Kisah && window.Kisah.modul) || {};
+    var perlu = { umum: 9, hero: 3, hook: 9, peta: 6, multivariat: 9, migrasi: 10, kesimpulan: 10 };
+    var lama = Object.keys(perlu).filter(function (k) { return m[k] !== perlu[k]; });
+    if (!lama.length) return;
+    var d = document.createElement('div');
+    d.className = 'peringatan-berkas';
+    d.setAttribute('role', 'alert');
+    d.innerHTML = '<strong>Berkas belum diperbarui:</strong> ' + lama.map(function (n) { return 'js/' + n + '.js'; }).join(', ') +
+      '. Salin versi terbaru ke folder docs/js, lalu tekan Ctrl+F5.';
+    document.body.insertBefore(d, document.body.firstChild);
+  });
+</script>
+</body>
+</html>
