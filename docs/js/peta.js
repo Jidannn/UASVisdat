@@ -94,7 +94,7 @@
     const state = { warna: true, lingkaran: true, metode: 'kuantil', sorot: '', terpilih: null, pulau: '' };
     let skala = null, batas = [];
     let svg, g, gKab, gSel, gLing, proj, path, zoom, paths, circles, rad;
-    let W = 20, H = 0, kZoom = 1;
+    let W = 0, H = 0, kZoom = 1;
 
     /* ---------- klasifikasi ---------- */
     function hitungKelas() {
