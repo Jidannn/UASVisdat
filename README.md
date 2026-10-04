@@ -126,4 +126,3 @@ lalu buka http://localhost:8000. Server ini tidak memakai cache, sehingga peruba
 - Data: BPS (sumber resmi, dicantumkan pada setiap visualisasi). Batas wilayah: LapakGIS 2024 (data pendukung non-BPS).
 - Pustaka: [D3.js](https://d3js.org) v7.9.0 (ISC) dan [d3-sankey](https://github.com/d3/d3-sankey) v0.12.3 (BSD-3-Clause), disertakan di `docs/js/vendor/`.
 - Huruf: Source Serif 4 dan IBM Plex Sans (SIL Open Font License) dimuat dari Google Fonts.
-- Kode: [pilih lisensi, mis. MIT] *(isi)*
