@@ -65,8 +65,8 @@
     const TP = D.tahun_p0 || 2025;                       // tahun persentase penduduk miskin yang dipakai di bab ini
     const KS = D.kestabilan || null;
     const info = document.getElementById('info-data');   // baris di kaki halaman: memastikan data terbaru yang terbaca
-    if (info) info.textContent = `Data Bab 3 terbaca: persentase penduduk miskin Maret ${TP}` +
-      (KS ? `, korelasi peringkat dengan 2025 \u03c1 = ${KS.rho_2020_2025.toString().replace('.', ',')}, ${KS.pindah_kelompok_2020_2025} dari ${KS.jumlah_provinsi} provinsi berpindah kelompok.` : ' (berkas migrasi.json belum memuat pemeriksaan kestabilan: jalankan ulang 06_siapkan_migrasi.py).');
+    // if (info) info.textContent = `Data Bab 3 terbaca: persentase penduduk miskin Maret ${TP}` +
+    //   (KS ? `, korelasi peringkat dengan 2025 \u03c1 = ${KS.rho_2020_2025.toString().replace('.', ',')}, ${KS.pindah_kelompok_2020_2025} dari ${KS.jumlah_provinsi} provinsi berpindah kelompok.` : ' (berkas migrasi.json belum memuat pemeriksaan kestabilan: jalankan ulang 06_siapkan_migrasi.py).');
     const per = D.urutan_periode;
     const S = { periode: per[0], fokus: -1, arah: 'keduanya', topN: 60, hover: -1, pasangan: null, level: 'provinsi' };
     const mat = () => D.periode[S.periode].matriks;
