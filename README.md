@@ -115,11 +115,11 @@ lalu buka http://localhost:8000. Server ini tidak memakai cache, sehingga peruba
 
 ## Keterbatasan
 
-- Persentase penduduk miskin Bab 1 dan 2 adalah Maret 2025, sedangkan Bab 3 memakai Maret 2020. Migrasi seumur hidup merekam arus yang jauh lebih lama dari satu tahun kemiskinan. Hubungan migrasi dan kemiskinan hanya gambaran statistik, bukan sebab-akibat.
-- Angka kabupaten/kota berasal dari survei (Susenas), bukan sensus, sehingga mengandung galat sampling.
-- IPM disusun dari empat variabel lain dalam analisis, dan P1 hampir kembar dengan P0 (VIF tinggi). Peta posisi PCA dan pencilan mantap terhadap hal ini, tetapi pembagian klaster tidak mantap pada ruang skor-z. Struktur klaster tergolong lemah, sehingga klaster bersifat deskriptif.
-- Batas wilayah disederhanakan; pulau yang sangat kecil tidak digambar.
-- Pada ponsel, peta tidak dapat digeser dengan satu jari agar halaman tetap bisa digulir; gunakan tombol zoom.
+- Evaluasi dengan pengguna belum dilakukan, sehingga kemudahan penggunaan dinilai oleh pengembang.
+- Tahun data tidak seragam: Bab 1 dan 2 memakai Maret 2025, Bab 3 memakai Maret 2020, dan migrasi seumur hidup merekam arus puluhan tahun. Hubungan migrasi dan kemiskinan bersifat statistik, bukan sebab-akibat.
+- Angka kabupaten/kota berasal dari survei sehingga mengandung galat sampling, terutama di wilayah kecil dan terpencil. Galat itu tidak ditampilkan.
+- Tumpang tindih variabel tidak merusak peta posisi dan pencilan, tetapi struktur klaster lemah dan pengelompokan dipilih setelah membandingkan beberapa alternatif.
+- Waktu muat awal relatif lama karena berkas peta berukuran 4,2 MB. Penyederhanaan geometri lebih lanjut atau format TopoJSON dapat mengurangi ukurannya.
 
 ## Lisensi dan atribusi
 
